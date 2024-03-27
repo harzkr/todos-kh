@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { Typography } from "@mui/material";
 
 export const Login = () => {
   return (
     <div>
-      <p>All login components will come here</p>
+      <Typography variant="caption">
+        All login components will come here
+      </Typography>
     </div>
   );
 };
