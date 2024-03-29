@@ -17,6 +17,9 @@ type Todo = {
 };
 
 export const Dashboard = () => {
+  const [name, setName] = React.useState("");
+  const [details, setDetails] = React.useState("");
+
   const { data, error, isLoading } = useGetTodosQuery();
 
   const [addTodo] = useAddTodoMutation();
@@ -24,11 +27,16 @@ export const Dashboard = () => {
   const [deleteTodo] = useDeleteTodoMutation();
 
   const handleAddTodos = async () => {
+    console.log("name", name);
+    console.log("details", details);
     await addTodo({
-      name: "New Todo",
-      details: "New Todo Details",
+      name: name,
+      details: details,
       done: false,
     });
+
+    setName("");
+    setDetails("");
   };
 
   const handleUpdateTodos = async (todo: Todo) => {
@@ -44,21 +52,27 @@ export const Dashboard = () => {
     await deleteTodo(todo.id);
   };
 
+  console.log(data, "checking data");
+
   return (
     <div>
-      <h1>Dashboard</h1>
-
-      <TextField id="outlined-basic" label="Todo" variant="outlined" />
-      <br />
-      <Button onClick={handleAddTodos} variant="contained" color="primary">
-        Add Todo
-      </Button>
-
       {isLoading && <div>Loading...</div>}
-      {data && (
+      {data && data.data && (
         <div>
-          {data.todos.map((todo: Todo) => (
-            <div key={todo.id}>
+          {data.data.map((todo: Todo) => (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                padding: "10px",
+                border: "1px solid #ccc",
+                margin: "10px 0",
+              }}
+              key={todo.id}
+            >
               <Checkbox
                 checked={todo.done}
                 onChange={() =>
@@ -69,6 +83,7 @@ export const Dashboard = () => {
                 }
               />
               <Typography variant="body1">{todo.name}</Typography>
+              <Typography variant="body2">{todo.details}</Typography>
               <Button
                 onClick={() => handleDeleteTodos(todo)}
                 variant="contained"
@@ -80,6 +95,25 @@ export const Dashboard = () => {
           ))}
         </div>
       )}
+
+      <div>
+        <TextField
+          onChange={(e) => setName(e.target.value)}
+          id="outlined-basic"
+          label="Name"
+          variant="outlined"
+        />
+        <TextField
+          onChange={(e) => setDetails(e.target.value)}
+          id="outlined-basic"
+          label="Details"
+          variant="outlined"
+        />
+        <br />
+        <Button onClick={handleAddTodos} variant="contained" color="primary">
+          Add Todo
+        </Button>
+      </div>
     </div>
   );
 };

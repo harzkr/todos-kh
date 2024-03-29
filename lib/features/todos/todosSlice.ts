@@ -14,31 +14,29 @@ interface Todo {
   done: boolean;
 }
 
-interface TodosList {
-  todos: Todo[];
+interface TodosResponse {
+  data: Todo[];
+  string: string;
 }
 
 // Define a service using a base URL and expected endpoints
 export const todosApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5001",
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("access-token");
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
   }),
   reducerPath: "todosApi",
   // Tag types are used for caching and invalidation.
   tagTypes: ["Todos"],
   endpoints: (build) => ({
-    getTodos: build.query<TodosList, void>({
+    getTodos: build.query<TodosResponse, void>({
       query: () => ({
         url: `/todo`,
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+        },
       }),
+      providesTags: ["Todos"],
     }),
     addTodo: build.mutation<Todo, TodoBody>({
       query: (body) => ({
@@ -47,8 +45,10 @@ export const todosApiSlice = createApi({
         body,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       }),
+      invalidatesTags: ["Todos"],
     }),
     updateTodo: build.mutation<Todo, Todo>({
       query: (body) => ({
@@ -57,14 +57,20 @@ export const todosApiSlice = createApi({
         body,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       }),
+      invalidatesTags: ["Todos"],
     }),
     deleteTodo: build.mutation<void, string>({
       query: (id) => ({
         url: `/todo/${id}`,
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+        },
       }),
+      invalidatesTags: ["Todos"],
     }),
   }),
 });

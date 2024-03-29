@@ -3,10 +3,16 @@ import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import { counterSlice } from "./features/counter/counterSlice";
 import { quotesApiSlice } from "./features/quotes/quotesApiSlice";
 import { loginApiSlice } from "./features/login/loginApiSlice";
+import { todosApiSlice } from "./features/todos/todosSlice";
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
-const rootReducer = combineSlices(counterSlice, quotesApiSlice, loginApiSlice);
+const rootReducer = combineSlices(
+  counterSlice,
+  quotesApiSlice,
+  loginApiSlice,
+  todosApiSlice
+);
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
 
@@ -22,7 +28,8 @@ export const makeStore = () => {
     middleware: (getDefaultMiddleware) => {
       return getDefaultMiddleware()
         .concat(quotesApiSlice.middleware)
-        .concat(loginApiSlice.middleware);
+        .concat(loginApiSlice.middleware)
+        .concat(todosApiSlice.middleware);
     },
   });
 };
