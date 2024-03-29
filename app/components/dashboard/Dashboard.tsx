@@ -27,16 +27,17 @@ export const Dashboard = () => {
   const [deleteTodo] = useDeleteTodoMutation();
 
   const handleAddTodos = async () => {
-    console.log("name", name);
-    console.log("details", details);
-    await addTodo({
-      name: name,
-      details: details,
-      done: false,
-    });
+    const nameValue = name;
+    const detailsValue = details;
 
     setName("");
     setDetails("");
+
+    await addTodo({
+      name: nameValue,
+      details: detailsValue,
+      done: false,
+    });
   };
 
   const handleUpdateTodos = async (todo: Todo) => {
@@ -55,16 +56,30 @@ export const Dashboard = () => {
   console.log(data, "checking data");
 
   return (
-    <div>
+    <div
+      style={{
+        width: "100%",
+        padding: "20px",
+        height: "100vh",
+      }}
+    >
       {isLoading && <div>Loading...</div>}
+
       {data && data.data && (
-        <div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            height: "calc(100vh - 200px)",
+            overflowY: "scroll",
+          }}
+        >
           {data.data.map((todo: Todo) => (
             <div
               style={{
                 display: "flex",
                 flexDirection: "row",
-                justifyContent: "space-between",
                 alignItems: "center",
                 width: "100%",
                 padding: "10px",
@@ -73,20 +88,38 @@ export const Dashboard = () => {
               }}
               key={todo.id}
             >
-              <Checkbox
-                checked={todo.done}
-                onChange={() =>
-                  handleUpdateTodos({
-                    ...todo,
-                    done: !todo.done,
-                  })
-                }
-              />
-              <Typography variant="body1">{todo.name}</Typography>
-              <Typography variant="body2">{todo.details}</Typography>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Checkbox
+                    checked={todo.done}
+                    onChange={() =>
+                      handleUpdateTodos({
+                        ...todo,
+                        done: !todo.done,
+                      })
+                    }
+                  />
+                  <Typography variant="body1">{todo.name}</Typography>
+                </div>
+                <div>
+                  <Typography variant="body2">{todo.details}</Typography>
+                </div>
+              </div>
               <Button
                 onClick={() => handleDeleteTodos(todo)}
-                variant="contained"
+                variant="text"
                 color="secondary"
               >
                 Delete
@@ -96,21 +129,36 @@ export const Dashboard = () => {
         </div>
       )}
 
-      <div>
-        <TextField
-          onChange={(e) => setName(e.target.value)}
-          id="outlined-basic"
-          label="Name"
-          variant="outlined"
-        />
-        <TextField
-          onChange={(e) => setDetails(e.target.value)}
-          id="outlined-basic"
-          label="Details"
-          variant="outlined"
-        />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          margin: "20px auto",
+          position: "fixed",
+          bottom: "0px",
+        }}
+      >
+        <div>
+          <TextField
+            onChange={(e) => setName(e.target.value)}
+            id="outlined-basic"
+            label="Name"
+            variant="outlined"
+          />
+          <TextField
+            onChange={(e) => setDetails(e.target.value)}
+            id="outlined-basic"
+            label="Details"
+            variant="outlined"
+          />
+        </div>
         <br />
-        <Button onClick={handleAddTodos} variant="contained" color="primary">
+        <Button
+          onClick={handleAddTodos}
+          variant="contained"
+          color="primary"
+          disabled={name.length === 0}
+        >
           Add Todo
         </Button>
       </div>
