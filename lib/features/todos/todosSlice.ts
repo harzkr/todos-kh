@@ -20,20 +20,29 @@ interface TodosList {
 
 // Define a service using a base URL and expected endpoints
 export const todosApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5001" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:5001",
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("access-token");
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
   reducerPath: "todosApi",
   // Tag types are used for caching and invalidation.
   tagTypes: ["Todos"],
   endpoints: (build) => ({
     getTodos: build.query<TodosList, void>({
       query: () => ({
-        url: `/todos`,
+        url: `/todo`,
         method: "GET",
       }),
     }),
     addTodo: build.mutation<Todo, TodoBody>({
       query: (body) => ({
-        url: `/todos`,
+        url: `/todo`,
         method: "POST",
         body,
         headers: {
@@ -43,7 +52,7 @@ export const todosApiSlice = createApi({
     }),
     updateTodo: build.mutation<Todo, Todo>({
       query: (body) => ({
-        url: `/todos/${body.id}`,
+        url: `/todo/${body.id}`,
         method: "PUT",
         body,
         headers: {
@@ -53,7 +62,7 @@ export const todosApiSlice = createApi({
     }),
     deleteTodo: build.mutation<void, string>({
       query: (id) => ({
-        url: `/todos/${id}`,
+        url: `/todo/${id}`,
         method: "DELETE",
       }),
     }),
