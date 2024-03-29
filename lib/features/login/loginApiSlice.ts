@@ -13,7 +13,7 @@ interface LoginResponse {
 
 // Define a service using a base URL and expected endpoints
 export const loginApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5001" }),
   reducerPath: "loginApi",
   // Tag types are used for caching and invalidation.
   tagTypes: ["Login"],
@@ -22,9 +22,9 @@ export const loginApiSlice = createApi({
       query: ({ username, password }) => ({
         url: `/login`,
         method: "POST",
-        body: {
-          username,
-          password,
+        body: { username, password },
+        headers: {
+          "Content-Type": "application/json",
         },
       }),
     }),

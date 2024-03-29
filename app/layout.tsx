@@ -21,9 +21,7 @@ export default function RootLayout({ children }: Props) {
             <ThemeProvider theme={theme}>
               <section className={styles.container}>
                 <header className={styles.header}></header>
-
                 <main className={styles.main}>{children}</main>
-
                 <footer className={styles.footer}></footer>
               </section>
             </ThemeProvider>
