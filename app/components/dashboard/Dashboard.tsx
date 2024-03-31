@@ -24,13 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { redirect } from "next/navigation";
 import cssStyles from "./dashboard.module.css";
-
-type Todo = {
-  id: string;
-  details: string;
-  done: boolean;
-  name: string;
-};
+import { Todo, TodoBodyType, TodosResponseType } from "@/lib/types";
 
 export const Dashboard = () => {
   const [name, setName] = React.useState("");
@@ -129,6 +123,138 @@ export const Dashboard = () => {
     }
   }, [data, checkAuth]);
 
+  const renderTodos = (data: TodosResponseType) => {
+    const backgroundColor = (i: number) =>
+      i % 2 === 0 ? "white" : "lightgray";
+
+    return (
+      <div className={cssStyles.dataContainer}>
+        {data.data.toReversed().map((todo: Todo, row: number) => (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+              padding: "10px",
+              border: "1px solid #ccc",
+              margin: "10px 0",
+              backgroundColor: backgroundColor(row),
+            }}
+            key={todo.id}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Checkbox
+                  checked={todo.done}
+                  onChange={() =>
+                    handleUpdateTodos({
+                      ...todo,
+                      done: !todo.done,
+                    })
+                  }
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  <div>
+                    {editing && editingTodo === todo.id ? (
+                      <TextField
+                        value={name}
+                        variant="standard"
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    ) : (
+                      <Typography
+                        style={{
+                          textDecoration: todo.done ? "line-through" : "none",
+                        }}
+                        variant="body1"
+                      >
+                        {todo.name}
+                      </Typography>
+                    )}
+                  </div>
+                  <div>
+                    {editing && editingTodo === todo.id ? (
+                      <TextField
+                        value={details}
+                        variant="standard"
+                        onChange={(e) => setDetails(e.target.value)}
+                        multiline
+                        rows={4}
+                        fullWidth
+                      />
+                    ) : (
+                      <Typography
+                        style={{
+                          textDecoration: todo.done ? "line-through" : "none",
+                        }}
+                        variant="body2"
+                      >
+                        {todo.details}
+                      </Typography>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              {editing && editingTodo === todo.id ? (
+                <Button
+                  onClick={() => handleSave(todo)}
+                  variant="contained"
+                  color="primary"
+                  disabled={name.length === 0}
+                >
+                  Save
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => handleEditing(todo)}
+                  variant="text"
+                  color="primary"
+                  disabled={editing}
+                >
+                  Edit
+                </Button>
+              )}
+              <IconButton
+                onClick={() => handleDeleteTodos(todo)}
+                aria-label="delete"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   if (!isAuth) {
     return <CircularProgress />;
   } else {
@@ -150,135 +276,7 @@ export const Dashboard = () => {
           </div>
         )}
 
-        {data && data.data && data.data.length > 0 && (
-          <div className={cssStyles.dataContainer}>
-            {data.data.toReversed().map((todo: Todo) => (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  padding: "10px",
-                  border: "1px solid #ccc",
-                  margin: "10px 0",
-                }}
-                key={todo.id}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Checkbox
-                      checked={todo.done}
-                      onChange={() =>
-                        handleUpdateTodos({
-                          ...todo,
-                          done: !todo.done,
-                        })
-                      }
-                    />
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      <div>
-                        {editing && editingTodo === todo.id ? (
-                          <TextField
-                            value={name}
-                            variant="standard"
-                            onChange={(e) => setName(e.target.value)}
-                          />
-                        ) : (
-                          <Typography
-                            style={{
-                              textDecoration: todo.done
-                                ? "line-through"
-                                : "none",
-                            }}
-                            variant="body1"
-                          >
-                            {todo.name}
-                          </Typography>
-                        )}
-                      </div>
-                      <div>
-                        {editing && editingTodo === todo.id ? (
-                          <TextField
-                            value={details}
-                            variant="standard"
-                            onChange={(e) => setDetails(e.target.value)}
-                            multiline
-                            rows={4}
-                            fullWidth
-                          />
-                        ) : (
-                          <Typography
-                            style={{
-                              textDecoration: todo.done
-                                ? "line-through"
-                                : "none",
-                            }}
-                            variant="body2"
-                          >
-                            {todo.details}
-                          </Typography>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  {editing && editingTodo === todo.id ? (
-                    <Button
-                      onClick={() => handleSave(todo)}
-                      variant="contained"
-                      color="primary"
-                      disabled={name.length === 0}
-                    >
-                      Save
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => handleEditing(todo)}
-                      variant="text"
-                      color="primary"
-                      disabled={editing}
-                    >
-                      Edit
-                    </Button>
-                  )}
-                  <IconButton
-                    onClick={() => handleDeleteTodos(todo)}
-                    aria-label="delete"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        {data && data.data && data.data.length > 0 && renderTodos(data)}
 
         <div
           style={{

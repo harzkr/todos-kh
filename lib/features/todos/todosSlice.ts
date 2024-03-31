@@ -1,24 +1,6 @@
 // Need to use the React-specific entry point to import `createApi`
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-interface TodoBody {
-  name: string;
-  details: string;
-  done: boolean;
-}
-
-interface Todo {
-  id: string;
-  name: string;
-  details: string;
-  done: boolean;
-}
-
-interface TodosResponse {
-  data: Todo[];
-  string: string;
-  error_message?: string;
-}
+import { Todo, TodoBodyType, TodosResponseType } from "@/lib/types";
 
 // Define a service using a base URL and expected endpoints
 export const todosApiSlice = createApi({
@@ -29,7 +11,7 @@ export const todosApiSlice = createApi({
   // Tag types are used for caching and invalidation.
   tagTypes: ["Todos"],
   endpoints: (build) => ({
-    getTodos: build.query<TodosResponse, void>({
+    getTodos: build.query<TodosResponseType, void>({
       query: () => ({
         url: `/todo`,
         method: "GET",
@@ -39,7 +21,7 @@ export const todosApiSlice = createApi({
       }),
       providesTags: ["Todos"],
     }),
-    addTodo: build.mutation<Todo, TodoBody>({
+    addTodo: build.mutation<Todo, TodoBodyType>({
       query: (body) => ({
         url: `/todo`,
         method: "POST",
