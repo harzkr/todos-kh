@@ -17,6 +17,7 @@ interface Todo {
 interface TodosResponse {
   data: Todo[];
   string: string;
+  error_message?: string;
 }
 
 // Define a service using a base URL and expected endpoints

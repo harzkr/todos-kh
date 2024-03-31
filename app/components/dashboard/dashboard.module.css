@@ -1,0 +1,26 @@
+.outer{
+    width: 100%;
+    height: 100vh;
+}
+
+.centeredRowFlex{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.centeredColumnFlex{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dataContainer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: scroll;
+    height: calc(100vh - 100px);
+}

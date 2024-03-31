@@ -65,6 +65,7 @@ app.prepare().then(() => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+
         res.json(data);
       })
       .catch((error) => {
