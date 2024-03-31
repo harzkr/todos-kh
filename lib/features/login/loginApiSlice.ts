@@ -1,24 +1,13 @@
-// Need to use the React-specific entry point to import `createApi`
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { LoginBodyType, LoginResponseType } from "@/lib/types";
 
-interface LoginBody {
-  username: string;
-  password: string;
-}
-
-interface LoginResponse {
-  data: string;
-  string: string;
-}
-
-// Define a service using a base URL and expected endpoints
 export const loginApiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5001" }),
   reducerPath: "loginApi",
   // Tag types are used for caching and invalidation.
   tagTypes: ["Login"],
   endpoints: (build) => ({
-    userLogin: build.mutation<LoginResponse, LoginBody>({
+    userLogin: build.mutation<LoginResponseType, LoginBodyType>({
       query: ({ username, password }) => ({
         url: `/login`,
         method: "POST",

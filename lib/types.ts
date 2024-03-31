@@ -17,8 +17,21 @@ interface TodosResponse {
   error_message?: string;
 }
 
+interface LoginBody {
+  username: string;
+  password: string;
+}
+
+interface LoginResponse {
+  data: string;
+  string: string;
+  error_message?: string;
+}
+
 export type {
   Todo,
   TodoBody as TodoBodyType,
   TodosResponse as TodosResponseType,
+  LoginBody as LoginBodyType,
+  LoginResponse as LoginResponseType,
 };

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Typography, TextField, Box, Button } from "@mui/material";
+import { Typography, TextField, Button } from "@mui/material";
 import cssStyles from "./login.module.css";
 import { useUserLoginMutation } from "@/lib/features/login/loginApiSlice";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,7 @@ export const Login = () => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [loginUser, { data, error, isLoading }] = useUserLoginMutation();
 
@@ -19,7 +20,10 @@ export const Login = () => {
 
   const handleRedirection = async (token: string) => {
     await localStorage.setItem("access-token", token);
-    router.replace("/");
+
+    setTimeout(() => {
+      router.replace("/");
+    }, 1000);
   };
 
   React.useEffect(() => {
@@ -28,6 +32,12 @@ export const Login = () => {
       if (data.string === "ok") {
         // redirect to dashboard
         handleRedirection(data.data);
+      } else {
+        // show error message
+        console.log("error", data);
+        if (data.error_message) {
+          setErrorMessage(data.error_message);
+        }
       }
     }
   }, [data]);
@@ -36,6 +46,11 @@ export const Login = () => {
     <div className={cssStyles.loginContainer}>
       <Typography variant="body2">ENTER YOUR CREDENTIALS TO LOGIN</Typography>
       <br />
+      {errorMessage && (
+        <Typography variant="body2" color="error">
+          {errorMessage}
+        </Typography>
+      )}
       <div className={cssStyles.outerContainer}>
         <TextField
           id="username"

@@ -58,6 +58,26 @@ export const Dashboard = () => {
     }
   };
 
+  const handleLogout = async () => {
+    await localStorage.removeItem("access-token");
+    router.replace("/login");
+  };
+
+  const renderTodos = (data: TodosResponseType) => {
+    const backgroundColor = (i: number) => (i % 2 === 0 ? "white" : "#fad1fe");
+
+    return (
+      <div className={cssStyles.dataContainer}>
+        {data.data.toReversed().map((todo: Todo, row: number) => (
+          <TodoComponent
+            key={todo.id}
+            todo={todo}
+            backgroundColor={backgroundColor(row)}
+          />
+        ))}
+      </div>
+    );
+  };
   useEffect(() => {
     checkAuth();
     if (data && data.string) {
@@ -76,27 +96,6 @@ export const Dashboard = () => {
       }
     }
   }, [data, checkAuth]);
-
-  const renderTodos = (data: TodosResponseType) => {
-    const backgroundColor = (i: number) => (i % 2 === 0 ? "white" : "#fad1fe");
-
-    return (
-      <div className={cssStyles.dataContainer}>
-        {data.data.toReversed().map((todo: Todo, row: number) => (
-          <TodoComponent
-            key={todo.id}
-            todo={todo}
-            backgroundColor={backgroundColor(row)}
-          />
-        ))}
-      </div>
-    );
-  };
-
-  const handleLogout = async () => {
-    await localStorage.removeItem("access-token");
-    router.replace("/login");
-  };
 
   if (!isAuth) {
     return <CircularProgress />;
