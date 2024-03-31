@@ -4,8 +4,6 @@ import {
   Typography,
   Button,
   TextField,
-  AppBar,
-  Toolbar,
   Modal,
   Fab,
   CircularProgress,
@@ -15,12 +13,15 @@ import {
   useAddTodoMutation,
 } from "@/lib/features/todos/todosSlice";
 import AddIcon from "@mui/icons-material/Add";
-import { redirect } from "next/navigation";
 import cssStyles from "./dashboard.module.css";
 import { Todo, TodosResponseType } from "@/lib/types";
 import { TodoComponent } from "./Todo";
+import { Header } from "../utilComponents/Header";
+import { useRouter } from "next/navigation";
 
 export const Dashboard = () => {
+  const router = useRouter();
+
   const [name, setName] = React.useState("");
   const [details, setDetails] = React.useState("");
 
@@ -49,11 +50,11 @@ export const Dashboard = () => {
     });
   };
 
-  const checkAuth = () => {
-    const token = localStorage.getItem("access-token");
+  const checkAuth = async () => {
+    const token = await localStorage.getItem("access-token");
 
     if (!token) {
-      redirect("/login");
+      router.replace("/login");
     }
   };
 
@@ -66,7 +67,7 @@ export const Dashboard = () => {
           error_message.toLowerCase().includes("unauthorized") ||
           error_message.toLowerCase().includes("invalid token")
         ) {
-          redirect("/login");
+          router.replace("/login");
         } else {
           setIsAuth(true);
         }
@@ -92,20 +93,23 @@ export const Dashboard = () => {
     );
   };
 
+  const handleLogout = async () => {
+    await localStorage.removeItem("access-token");
+    router.replace("/login");
+  };
+
   if (!isAuth) {
     return <CircularProgress />;
   } else {
     return (
       <div className={cssStyles.outer}>
-        <AppBar color="secondary" position="static">
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              TodoList App
-            </Typography>
-            <Button color="inherit">Logout</Button>
-          </Toolbar>
-        </AppBar>
+        <Header handleLogout={handleLogout} />
         {isLoading && <div>Loading...</div>}
+        {error && (
+          <div>
+            There seems to be some error happening. Please reload or relogin
+          </div>
+        )}
 
         {data && data.data && data.data.length === 0 && (
           <div
