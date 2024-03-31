@@ -6,9 +6,13 @@ import {
   TextField,
   Checkbox,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import {
-  useAddTodoMutation,
   useUpdateTodoMutation,
   useDeleteTodoMutation,
 } from "@/lib/features/todos/todosSlice";
@@ -29,9 +33,13 @@ export const TodoComponent = ({
   const [editing, setEditing] = React.useState(false);
   const [editingTodo, setEditingTodo] = React.useState("");
 
-  const [addTodo] = useAddTodoMutation();
   const [updateTodo] = useUpdateTodoMutation();
   const [deleteTodo] = useDeleteTodoMutation();
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
 
   const handleUpdateTodos = async (todo: Todo) => {
     await updateTodo({
@@ -78,6 +86,7 @@ export const TodoComponent = ({
       <div className={cssStyles.centeredColumnFlex}>
         <div className={cssStyles.centeredRowFlex}>
           <Checkbox
+            color="secondary"
             checked={todo.done}
             onChange={() =>
               handleUpdateTodos({
@@ -86,19 +95,17 @@ export const TodoComponent = ({
               })
             }
           />
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              wordBreak: "break-word",
-            }}
-          >
+          <div className={cssStyles.todoTextContainer}>
             <div>
               {editing && editingTodo === todo.id ? (
                 <TextField
+                  color="secondary"
                   value={name}
                   variant="standard"
                   onChange={(e) => setName(e.target.value)}
+                  style={{
+                    width: 300,
+                  }}
                 />
               ) : (
                 <Typography
@@ -115,11 +122,15 @@ export const TodoComponent = ({
               {editing && editingTodo === todo.id ? (
                 <TextField
                   value={details}
+                  color="secondary"
                   variant="standard"
                   onChange={(e) => setDetails(e.target.value)}
                   multiline
                   rows={4}
                   fullWidth
+                  style={{
+                    width: 300,
+                  }}
                 />
               ) : (
                 <Typography
@@ -140,8 +151,9 @@ export const TodoComponent = ({
           <Button
             onClick={() => handleSave(todo)}
             variant="contained"
-            color="primary"
+            color="secondary"
             disabled={name.length === 0}
+            aria-label="save"
           >
             Save
           </Button>
@@ -149,16 +161,43 @@ export const TodoComponent = ({
           <Button
             onClick={() => handleEditing(todo)}
             variant="text"
-            color="primary"
+            color="secondary"
             disabled={editing}
+            aria-label="edit"
           >
             Edit
           </Button>
         )}
-        <IconButton onClick={() => handleDeleteTodos(todo)} aria-label="delete">
+        <IconButton onClick={handleClickOpen} aria-label="delete">
           <DeleteIcon />
         </IconButton>
       </div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Deleting todo item"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this todo item?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="secondary" onClick={handleClose}>
+            No
+          </Button>
+          <Button
+            color="secondary"
+            onClick={() => handleDeleteTodos(todo)}
+            autoFocus
+          >
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

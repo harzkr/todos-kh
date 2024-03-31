@@ -68,3 +68,9 @@
 .calculatedHeight{
     height: calc(100vh - 100px);
 }
+
+.todoTextContainer{
+    display: flex;
+    flex-direction: column;
+    word-break: break-word;
+}

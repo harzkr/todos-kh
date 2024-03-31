@@ -77,7 +77,7 @@ export const Dashboard = () => {
   }, [data, checkAuth]);
 
   const renderTodos = (data: TodosResponseType) => {
-    const backgroundColor = (i: number) => (i % 2 === 0 ? "white" : "#ddeaf6");
+    const backgroundColor = (i: number) => (i % 2 === 0 ? "white" : "#fad1fe");
 
     return (
       <div className={cssStyles.dataContainer}>
@@ -97,7 +97,7 @@ export const Dashboard = () => {
   } else {
     return (
       <div className={cssStyles.outer}>
-        <AppBar position="static">
+        <AppBar color="secondary" position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               TodoList App
@@ -120,7 +120,7 @@ export const Dashboard = () => {
         {data && data.data && data.data.length > 0 && renderTodos(data)}
 
         <div className={cssStyles.fabFixedStyle}>
-          <Fab color="primary" aria-label="add" onClick={handleOpen}>
+          <Fab color="secondary" aria-label="add" onClick={handleOpen}>
             <AddIcon />
           </Fab>
         </div>
@@ -129,7 +129,6 @@ export const Dashboard = () => {
           open={open}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
         >
           <div className={cssStyles.modalContainer}>
             <Typography
@@ -148,6 +147,7 @@ export const Dashboard = () => {
                   variant="outlined"
                   value={name}
                   fullWidth
+                  color="secondary"
                 />
                 <TextField
                   onChange={(e) => setDetails(e.target.value)}
@@ -161,14 +161,16 @@ export const Dashboard = () => {
                   multiline
                   rows={4}
                   fullWidth
+                  color="secondary"
                 />
               </div>
               <br />
               <Button
                 onClick={handleAddTodos}
                 variant="contained"
-                color="primary"
                 disabled={name.length === 0}
+                aria-label="Add Todo"
+                color="secondary"
               >
                 Add Todo
               </Button>
