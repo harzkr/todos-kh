@@ -24,3 +24,47 @@
     overflow-y: scroll;
     height: calc(100vh - 100px);
 }
+
+.fabFixedStyle{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.modalContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    padding: 4px;
+    background-color: white;
+    border: 2px solid #000;
+}
+
+.modalTitle{
+    text-align: center;
+    padding: 20px;
+}
+
+.textFieldContainer{
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.todoContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 10px 0;
+}
+
+.calculatedHeight{
+    height: calc(100vh - 100px);
+}

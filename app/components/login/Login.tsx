@@ -18,13 +18,17 @@ export const Login = () => {
     const resp: any = await loginUser({ username, password });
   };
 
+  const handleRedirection = async (token: string) => {
+    await localStorage.setItem("access-token", token);
+    router.push("/");
+  };
+
   React.useEffect(() => {
     if (data) {
       console.log("data", data);
       if (data.string === "ok") {
         // redirect to dashboard
-        localStorage.setItem("access-token", data.data);
-        router.push("/");
+        handleRedirection(data.data);
       }
     }
   }, [data]);
