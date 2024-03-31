@@ -71,6 +71,7 @@ export const Login = () => {
           onChange={(e) => setUsername(e.target.value)}
           color="secondary"
           fullWidth
+          data-testid="username"
         />
         <br />
         <TextField
@@ -81,6 +82,7 @@ export const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           color="secondary"
           fullWidth
+          data-testid="password"
         />
       </div>
       <Button
@@ -88,6 +90,7 @@ export const Login = () => {
         disabled={username.length === 0 || password.length === 0 || isLoading}
         onClick={handleLogin}
         color="secondary"
+        data-testid="login-button"
       >
         Login
       </Button>

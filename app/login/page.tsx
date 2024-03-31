@@ -1,5 +1,5 @@
 import { Login } from "../components/login/Login";
-import { Typography, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 import { styles } from "./styles";
 
 export default function LoginPage() {
