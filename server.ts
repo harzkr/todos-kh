@@ -19,7 +19,7 @@ app.prepare().then(() => {
     const { username, password } = req.body;
 
     try {
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch(`${process.env.SERVER_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,6 +33,11 @@ app.prepare().then(() => {
       res.json(data);
     } catch (error) {
       console.error("Error:", error);
+      res.send({
+        string: "error",
+        error_message: "An error occurred",
+        data: null,
+      });
     }
   });
 
@@ -47,7 +52,7 @@ app.prepare().then(() => {
     const token = authorization.split(" ")[1];
 
     try {
-      const response = await fetch("http://localhost:3000/api/todo", {
+      const response = await fetch(`${process.env.SERVER_URL}/todo`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -57,6 +62,11 @@ app.prepare().then(() => {
       res.json(data);
     } catch (error) {
       console.error("Error:", error);
+      res.send({
+        string: "error",
+        error_message: "An error occurred",
+        data: null,
+      });
     }
   });
 
@@ -71,7 +81,7 @@ app.prepare().then(() => {
     const token = authorization.split(" ")[1];
 
     try {
-      const response = await fetch("http://localhost:3000/api/todo", {
+      const response = await fetch(`${process.env.SERVER_URL}/todo`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,6 +94,11 @@ app.prepare().then(() => {
       res.json(data);
     } catch (error) {
       console.error("Error:", error);
+      res.send({
+        string: "error",
+        error_message: "An error occurred",
+        data: null,
+      });
     }
   });
 
@@ -99,7 +114,7 @@ app.prepare().then(() => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/todo/${req.params.id}`,
+        `${process.env.SERVER_URL}/todo/${req.params.id}`,
         {
           method: "PUT",
           headers: {
@@ -113,6 +128,11 @@ app.prepare().then(() => {
       res.json(data);
     } catch (error) {
       console.error("Error:", error);
+      res.send({
+        string: "error",
+        error_message: "An error occurred",
+        data: null,
+      });
     }
   });
 
@@ -128,7 +148,7 @@ app.prepare().then(() => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/todo/${req.params.id}`,
+        `${process.env.SERVER_URL}/todo/${req.params.id}`,
         {
           method: "DELETE",
           headers: {
@@ -142,6 +162,11 @@ app.prepare().then(() => {
       res.json(data);
     } catch (error) {
       console.error("Error:", error);
+      res.send({
+        string: "error",
+        error_message: "An error occurred",
+        data: null,
+      });
     }
   });
 

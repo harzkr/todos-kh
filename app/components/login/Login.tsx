@@ -24,10 +24,8 @@ export const Login = () => {
   const handleRedirection = async (token: string) => {
     await localStorage.setItem("access-token", token);
 
-    setTimeout(() => {
-      setLoggingIn(false);
-      router.replace("/");
-    }, 2000);
+    setLoggingIn(false);
+    router.replace("/");
   };
 
   React.useEffect(() => {
