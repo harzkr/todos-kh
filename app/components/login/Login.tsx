@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Typography, TextField, Button } from "@mui/material";
+import { Typography, TextField, Button, CircularProgress } from "@mui/material";
 import cssStyles from "./login.module.css";
 import { useUserLoginMutation } from "@/lib/features/login/loginApiSlice";
 import { useRouter } from "next/navigation";
@@ -11,10 +11,13 @@ export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loggingIn, setLoggingIn] = useState(false);
 
   const [loginUser, { data, error, isLoading }] = useUserLoginMutation();
 
   const handleLogin = async () => {
+    setErrorMessage("");
+    setLoggingIn(true);
     await loginUser({ username, password });
   };
 
@@ -22,12 +25,13 @@ export const Login = () => {
     await localStorage.setItem("access-token", token);
 
     setTimeout(() => {
+      setLoggingIn(false);
       router.replace("/");
-    }, 1000);
+    }, 2000);
   };
 
   React.useEffect(() => {
-    if (data) {
+    if (data && data.string) {
       console.log("data", data);
       if (data.string === "ok") {
         // redirect to dashboard
@@ -37,15 +41,25 @@ export const Login = () => {
         console.log("error", data);
         if (data.error_message) {
           setErrorMessage(data.error_message);
+          setLoggingIn(false);
         }
       }
     }
-  }, [data]);
+
+    if (error) {
+      console.log("error", error);
+      setErrorMessage("An error occurred. Please try again.");
+      setLoggingIn(false);
+    }
+  }, [data, error]);
+
+  if (loggingIn) {
+    return <CircularProgress />;
+  }
 
   return (
     <div className={cssStyles.loginContainer}>
       <Typography variant="body2">ENTER YOUR CREDENTIALS TO LOGIN</Typography>
-      <br />
       {errorMessage && (
         <Typography variant="body2" color="error">
           {errorMessage}
