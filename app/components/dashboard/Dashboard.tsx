@@ -91,7 +91,7 @@ export const Dashboard = () => {
   }, [data]);
 
   if (!isAuth) {
-    return <CircularProgress />;
+    return <CircularProgress data-testid="loader" />;
   } else {
     return (
       <div className={cssStyles.outer}>
@@ -115,7 +115,7 @@ export const Dashboard = () => {
 
         {data && data.data && data.data.length > 0 && renderTodos(data)}
 
-        <div data-testid="add button" className={cssStyles.fabFixedStyle}>
+        <div data-testid="add-button" className={cssStyles.fabFixedStyle}>
           <Fab color="secondary" aria-label="add" onClick={handleOpen}>
             <AddIcon />
           </Fab>

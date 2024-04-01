@@ -1,4 +1,3 @@
-import "whatwg-fetch";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import Login from "../login/page";

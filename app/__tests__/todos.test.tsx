@@ -1,13 +1,10 @@
-import "whatwg-fetch";
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import Page from "../page";
-import { StoreProvider } from "../../app/StoreProvider";
-import configureStore from "redux-mock-store";
-import { server } from "./mocks/server";
-import { loginApiSlice } from "@/lib/features/login/loginApiSlice";
+import { server } from "./__mocks__/server";
 import { waitFor } from "@testing-library/react";
-import { ApiProvider } from "@reduxjs/toolkit/query/react";
+import { renderWithProviders } from "@/lib/utils/test-utils";
+import { act } from "react-dom/test-utils";
 
 jest.mock("next/navigation", () => ({
   useRouter() {
@@ -17,10 +14,8 @@ jest.mock("next/navigation", () => ({
   },
 }));
 
-const mockStore = configureStore();
-
 describe("Todos", () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     server.listen();
   });
 
@@ -33,14 +28,22 @@ describe("Todos", () => {
   });
 
   it("should display todos", async () => {
-    render(
-      <StoreProvider>
-        <Page />
-      </StoreProvider>
-    );
+    await act(async () => {
+      renderWithProviders(<Page />);
+    });
 
-    await waitFor(() => {
-      expect(screen.getByText("sed ut vero sit molestiae")).toBeInTheDocument();
+    waitFor(async () => {
+      expect(await screen.getByTestId("loader")).toBeInTheDocument();
+    });
+
+    waitFor(async () => {
+      expect(await screen.getByTestId("add-button")).toBeInTheDocument();
+    });
+
+    waitFor(async () => {
+      await expect(
+        screen.getByText("sed ut vero sit molestiae")
+      ).toBeInTheDocument();
     });
   });
 });

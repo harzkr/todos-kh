@@ -28,7 +28,6 @@ export const Login = () => {
 
   React.useEffect(() => {
     if (data && data.string) {
-      console.log("data", data);
       if (data.string === "ok") {
         // redirect to dashboard
         handleRedirection();
