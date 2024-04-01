@@ -12,6 +12,7 @@ import {
   useGetTodosQuery,
   useAddTodoMutation,
 } from "@/lib/features/todos/todosSlice";
+import { useUserLogoutMutation } from "@/lib/features/login/loginApiSlice";
 import AddIcon from "@mui/icons-material/Add";
 import cssStyles from "./dashboard.module.css";
 import { Todo, TodosResponseType } from "@/lib/types";
@@ -34,6 +35,7 @@ export const Dashboard = () => {
   const { data, error, isLoading } = useGetTodosQuery();
 
   const [addTodo] = useAddTodoMutation();
+  const [logout] = useUserLogoutMutation();
 
   const handleAddTodos = async () => {
     const nameValue = name;
@@ -50,16 +52,8 @@ export const Dashboard = () => {
     });
   };
 
-  const checkAuth = async () => {
-    const token = await localStorage.getItem("access-token");
-
-    if (!token) {
-      router.replace("/login");
-    }
-  };
-
   const handleLogout = async () => {
-    await localStorage.removeItem("access-token");
+    await logout();
     router.replace("/login");
   };
 
@@ -79,7 +73,6 @@ export const Dashboard = () => {
     );
   };
   useEffect(() => {
-    checkAuth();
     if (data && data.string) {
       if (data.error_message) {
         const { error_message } = data;
@@ -95,7 +88,7 @@ export const Dashboard = () => {
         setIsAuth(true);
       }
     }
-  }, [data, checkAuth]);
+  }, [data]);
 
   if (!isAuth) {
     return <CircularProgress />;

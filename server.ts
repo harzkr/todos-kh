@@ -32,7 +32,6 @@ app.prepare().then(() => {
         body: JSON.stringify({ username, password }),
       });
       const data = await response.json();
-      console.log("data", data);
       res.cookie("accessToken", data.data, {
         maxAge: 900000,
         httpOnly: true,
@@ -175,6 +174,11 @@ app.prepare().then(() => {
         data: null,
       });
     }
+  });
+
+  server.post("/logout", async (req, res) => {
+    res.clearCookie("accessToken");
+    res.redirect("/login");
   });
 
   server.all("*", (req, res) => {

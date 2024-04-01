@@ -21,9 +21,7 @@ export const Login = () => {
     await loginUser({ username, password });
   };
 
-  const handleRedirection = async (token: string) => {
-    await localStorage.setItem("access-token", token);
-
+  const handleRedirection = async () => {
     setLoggingIn(false);
     router.replace("/");
   };
@@ -33,7 +31,7 @@ export const Login = () => {
       console.log("data", data);
       if (data.string === "ok") {
         // redirect to dashboard
-        handleRedirection(data.data);
+        handleRedirection();
       } else {
         // show error message
         console.log("error", data);

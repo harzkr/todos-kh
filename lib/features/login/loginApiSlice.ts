@@ -17,7 +17,14 @@ export const loginApiSlice = createApi({
         },
       }),
     }),
+    userLogout: build.mutation<void, void>({
+      query: () => ({
+        url: `/logout`,
+        method: "POST",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
-export const { useUserLoginMutation } = loginApiSlice;
+export const { useUserLoginMutation, useUserLogoutMutation } = loginApiSlice;
