@@ -6,6 +6,7 @@ import { Todo, TodoBodyType, TodosResponseType } from "@/lib/types";
 export const todosApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5001",
+    credentials: "include",
   }),
   reducerPath: "todosApi",
   // Tag types are used for caching and invalidation.
@@ -15,9 +16,6 @@ export const todosApiSlice = createApi({
       query: () => ({
         url: `/todo`,
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-        },
       }),
       providesTags: ["Todos"],
     }),
@@ -28,7 +26,6 @@ export const todosApiSlice = createApi({
         body,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       }),
       invalidatesTags: ["Todos"],
@@ -40,7 +37,6 @@ export const todosApiSlice = createApi({
         body,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       }),
       invalidatesTags: ["Todos"],
@@ -49,9 +45,6 @@ export const todosApiSlice = createApi({
       query: (id) => ({
         url: `/todo/${id}`,
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-        },
       }),
       invalidatesTags: ["Todos"],
     }),

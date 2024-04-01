@@ -2,6 +2,7 @@ import express from "express";
 import next from "next";
 import cors from "cors";
 import fetch from "node-fetch";
+import cookieParser from "cookie-parser";
 
 const port = 5001;
 const dev = process.env.NODE_ENV !== "production";
@@ -14,6 +15,7 @@ app.prepare().then(() => {
   server.use(cors());
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
+  server.use(cookieParser());
 
   server.post("/login", async (req, res) => {
     const { username, password } = req.body;
@@ -30,6 +32,11 @@ app.prepare().then(() => {
         body: JSON.stringify({ username, password }),
       });
       const data = await response.json();
+      console.log("data", data);
+      res.cookie("accessToken", data.data, {
+        maxAge: 900000,
+        httpOnly: true,
+      });
       res.json(data);
     } catch (error) {
       console.error("Error:", error);
@@ -42,14 +49,14 @@ app.prepare().then(() => {
   });
 
   server.get("/todo", async (req, res) => {
-    const { authorization } = req.headers;
+    const { accessToken } = req.cookies;
 
-    if (!authorization) {
+    if (!accessToken) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
 
-    const token = authorization.split(" ")[1];
+    const token = accessToken;
 
     try {
       const response = await fetch(`${process.env.SERVER_URL}/todo`, {
@@ -71,14 +78,14 @@ app.prepare().then(() => {
   });
 
   server.post("/todo", async (req, res) => {
-    const { authorization } = req.headers;
+    const { accessToken } = req.cookies;
 
-    if (!authorization) {
+    if (!accessToken) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
 
-    const token = authorization.split(" ")[1];
+    const token = accessToken;
 
     try {
       const response = await fetch(`${process.env.SERVER_URL}/todo`, {
@@ -103,14 +110,14 @@ app.prepare().then(() => {
   });
 
   server.put("/todo/:id", async (req, res) => {
-    const { authorization } = req.headers;
+    const { accessToken } = req.cookies;
 
-    if (!authorization) {
+    if (!accessToken) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
 
-    const token = authorization.split(" ")[1];
+    const token = accessToken;
 
     try {
       const response = await fetch(
@@ -137,14 +144,14 @@ app.prepare().then(() => {
   });
 
   server.delete("/todo/:id", async (req, res) => {
-    const { authorization } = req.headers;
+    const { accessToken } = req.cookies;
 
-    if (!authorization) {
+    if (!accessToken) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
 
-    const token = authorization.split(" ")[1];
+    const token = accessToken;
 
     try {
       const response = await fetch(
