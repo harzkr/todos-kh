@@ -131,6 +131,7 @@ export const Dashboard = () => {
               variant="h5"
               component="h2"
               className={cssStyles.modalTitle}
+              data-testid="add-todo-modal-title"
             >
               Add Todo
             </Typography>

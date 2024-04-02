@@ -38,11 +38,23 @@ describe("Todos", () => {
 
     waitFor(async () => {
       expect(await screen.getByTestId("add-button")).toBeInTheDocument();
+
+      const addButton = await screen.getByTestId("add-button");
+
+      await act(async () => {
+        await addButton.click();
+      });
+
+      waitFor(async () => {
+        expect(
+          await screen.getByTestId("add-todo-modal-title")
+        ).toBeInTheDocument();
+      });
     });
 
     waitFor(async () => {
-      await expect(
-        screen.getByText("sed ut vero sit molestiae")
+      expect(
+        await screen.getByText("sed ut vero sit molestiae")
       ).toBeInTheDocument();
     });
   });
