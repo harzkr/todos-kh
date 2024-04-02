@@ -8,6 +8,9 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+//Custom Express Next server to call the main backend
+//Overcomes the CORS issues
+
 app.prepare().then(() => {
   const server = express();
 
