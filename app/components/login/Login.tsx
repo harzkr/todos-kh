@@ -60,27 +60,31 @@ export const Login = () => {
           {errorMessage}
         </Typography>
       )}
-      <div className={cssStyles.outerContainer}>
-        <TextField
-          id="username"
-          label="Username"
-          variant="outlined"
-          onChange={(e) => setUsername(e.target.value)}
-          color="secondary"
-          fullWidth
-          data-testid="username"
-        />
-        <br />
-        <TextField
-          id="password"
-          label="Password"
-          type="password"
-          variant="outlined"
-          onChange={(e) => setPassword(e.target.value)}
-          color="secondary"
-          fullWidth
-          data-testid="password"
-        />
+      <div>
+        <form className={cssStyles.outerContainer}>
+          <TextField
+            id="username"
+            label="Username"
+            variant="outlined"
+            onChange={(e) => setUsername(e.target.value)}
+            color="secondary"
+            fullWidth
+            data-testid="username"
+            autoComplete="on"
+          />
+          <br />
+          <TextField
+            id="password"
+            label="Password"
+            type="password"
+            variant="outlined"
+            onChange={(e) => setPassword(e.target.value)}
+            color="secondary"
+            fullWidth
+            data-testid="password"
+            autoComplete="on"
+          />
+        </form>
       </div>
       <Button
         variant="text"

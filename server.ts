@@ -4,7 +4,6 @@ import cors from "cors";
 import fetch from "node-fetch";
 import cookieParser from "cookie-parser";
 
-const port = 5001;
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
@@ -184,6 +183,8 @@ app.prepare().then(() => {
   server.all("*", (req, res) => {
     return handle(req, res);
   });
+
+  const port = process.env.PORT || 5001;
 
   server.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);

@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LoginBodyType, LoginResponseType } from "@/lib/types";
 
 export const loginApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5001" }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_SERVER_URL }),
   reducerPath: "loginApi",
   // Tag types are used for caching and invalidation.
   tagTypes: ["Login"],

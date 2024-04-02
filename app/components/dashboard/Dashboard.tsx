@@ -25,6 +25,7 @@ export const Dashboard = () => {
 
   const [name, setName] = React.useState("");
   const [details, setDetails] = React.useState("");
+  const [displayError, setDisplayError] = React.useState("");
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -83,6 +84,9 @@ export const Dashboard = () => {
           router.replace("/login");
         } else {
           setIsAuth(true);
+          if (error_message.length > 0) {
+            setDisplayError(error_message);
+          }
         }
       } else {
         setIsAuth(true);
@@ -97,9 +101,11 @@ export const Dashboard = () => {
       <div className={cssStyles.outer}>
         <Header handleLogout={handleLogout} />
         {isLoading && <div>Loading...</div>}
-        {error && (
-          <div>
-            There seems to be some error happening. Please reload or relogin
+        {(error || displayError.length > 0) && (
+          <div className={cssStyles.centeredRowFlex}>
+            <Typography color="red">
+              There seems to be some error happening. Please reload or relogin
+            </Typography>
           </div>
         )}
 

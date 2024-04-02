@@ -5,7 +5,7 @@ import { Todo, TodoBodyType, TodosResponseType } from "@/lib/types";
 // Define a service using a base URL and expected endpoints
 export const todosApiSlice = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5001",
+    baseUrl: process.env.NEXT_PUBLIC_SERVER_URL,
     credentials: "include",
   }),
   reducerPath: "todosApi",
